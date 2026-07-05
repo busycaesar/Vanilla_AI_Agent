@@ -16,7 +16,7 @@ A learning project to understand how AI agents work under the hood, built with p
 
 ## AI Configuration
 
-- SDK: `openai` (used directly, no agent framework)
+- SDK: `openai`
 - Model: `gpt-4o-mini`
 
 ## How to run the project?

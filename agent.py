@@ -1,9 +1,8 @@
 from tools import call_function, tools
 from config import client
 import json
-from schemas import WeatherResponse
 
-def agent_run(messages):
+def agent_run(messages, response_format):
     # Passing the message to the model.
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -33,7 +32,7 @@ def agent_run(messages):
         messages=messages,
         tools=tools,
         # Passing the format in which the response is required.
-        response_format=WeatherResponse
+        response_format=response_format,
     )
 
     # Returning the final response.

@@ -1,4 +1,5 @@
 import requests
+import json
 
 # Tool for the agent to get the weather at the specificed coordinates.
 def get_weather(latitude: float, longitude: float) -> float:
@@ -29,13 +30,20 @@ def get_weather(latitude: float, longitude: float) -> float:
 
     return data["current_weather"]["temperature"]
 
+def search_knowledge_base(question: str):
+    """
+    Load the whole knowledge based from the json file.
+    """
+    with open("kb.json", "r") as f:
+        return json.load(f)
+
 # Declaring the list of tools and required arguments, to assist the LLM.
 tools = [
     {
         "type": "function",
         "function": {
             "name": "get_weather",
-            "description": "Get current temperature for the provided longitude and latitude coordinates",
+            "description": "Get current temperature for the provided longitude and latitude coordinates.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -47,6 +55,22 @@ tools = [
             },
             "strict": True
         }
+    },
+        {
+        "type": "function",
+        "function": {
+            "name": "search_knowledge_base",
+            "description": "Load the whole knowledge based from the json file.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "question": {"type": "string"},
+                },
+                "required": ["question"],
+                "additionalProperties": False,
+            },
+            "strict": True
+        }
     }
 ]
 
@@ -54,3 +78,5 @@ tools = [
 def call_function(name, args):
     if name == "get_weather":
         return get_weather(**args)
+    elif name == "search_knowledge_base":
+        return search_knowledge_base(**args)

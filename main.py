@@ -1,13 +1,18 @@
 from agent import agent_run
 from schemas import WeatherResponse, KBResponse
 
-# system_prompt = "You are a helpful weather assistant."
+# Set the WEATHER True for letting the agent use the tool. Additionally, set the KNOWLEDGE_BASE true to see how the agent retrieves the knowledge from external source.
+WEATHER = False
+KNOWLEDGE_BASE = True
 
-# user_query = "Whats the weather like in Paris today?"
-
-system_prompt = "You are a helpful assistant that answers questions from the knowledge base about our e-commerce store."
-
-user_query = "What is the return policy?"
+if WEATHER:
+    system_prompt = "You are a helpful weather assistant."
+    user_query = "Whats the weather like in Paris today?"
+elif KNOWLEDGE_BASE:
+    system_prompt = "You are a helpful assistant that answers questions from the knowledge base about our e-commerce store."
+    user_query = "What is the return policy?"
+else:
+    raise ValueError("No mode selected: set WEATHER or KNOWLEDGE_BASE to True.")
 
 messages = [
             {"role": "system", "content": system_prompt},
@@ -17,6 +22,6 @@ messages = [
         },
 ]
 
-final_response = agent_run(messages, KBResponse)
+final_response = agent_run(messages, WeatherResponse if WEATHER else KBResponse if KNOWLEDGE_BASE else None)
 
 print(final_response)

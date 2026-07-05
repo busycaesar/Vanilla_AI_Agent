@@ -30,10 +30,13 @@ def get_weather(latitude: float, longitude: float) -> float:
 
     return data["current_weather"]["temperature"]
 
+# Tool for the agent to retrieve the relevant data for the question of the user.
 def search_knowledge_base(question: str):
     """
     Load the whole knowledge based from the json file.
     """
+    # Passing the whole file for now to mock the working.
+    # RAG can be implemented here to look for the relevant chunk of data.
     with open("kb.json", "r") as f:
         return json.load(f)
 

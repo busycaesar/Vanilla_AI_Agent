@@ -1,8 +1,7 @@
-from tools import call_function, tools
-from config import client
+from src.config import client
 import json
 
-def agent_run(messages, response_format):
+def agent_run(messages, response_format, tools, call_function):
     # Passing the message to the model.
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -26,14 +25,17 @@ def agent_run(messages, response_format):
             {"role": "tool", "tool_call_id": tool_call.id, "content": json.dumps(result)}
         )
 
-    # Passing the updated message to the model.
-    completion2 = client.beta.chat.completions.parse(
+    response = agent_ask(messages, response_format)
+
+    return response
+
+def agent_ask(messages, response_format):
+    completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini",
         messages=messages,
-        tools=tools,
+      #  tools=tools,
         # Passing the format in which the response is required.
         response_format=response_format,
     )
 
-    # Returning the final response.
-    return completion2.choices[0].message.parsed
+    return completion.choices[0].message.parsed
